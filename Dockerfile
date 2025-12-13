@@ -1,5 +1,5 @@
 # Etapa 1: Builder
-FROM composer:latest as composer
+FROM composer:2.7 as composer
 COPY . /app
 WORKDIR /app
 RUN composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
