@@ -1,6 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 /* Importar el CSS principal de Material Kit */
 @import url('../css/material-kit.min.css');
