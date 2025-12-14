@@ -13,10 +13,15 @@
 
         <!-- Material Kit CSS -->
         <link href="{{ asset('css/material-kit.min.css') }}" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+        <link href="{{ asset('css/material-kit.min.css') }}" rel="stylesheet">
 
         <!-- Livewire Styles -->
         @livewireStyles
     </head>
+    <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/material-kit.min.js') }}" type="text/javascript"></script>
     <body class="index-page sidebar-collapse">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg bg-primary fixed-top navbar-transparent" color-on-scroll="100">
