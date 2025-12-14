@@ -12,9 +12,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 
         <!-- Material Kit CSS -->
-        <link href="{{ asset('css/material-kit.min.css') }}" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-        <link href="{{ asset('css/material-kit.min.css') }}" rel="stylesheet">
+        <link href="{{ secure_asset('css/material-kit.min.css') }}" rel="stylesheet">
 
         <!-- Livewire Styles -->
         @livewireStyles
@@ -79,11 +78,9 @@
         </div>
 
         <!-- Scripts -->
-        <script src="{{ asset('js/core/jquery.min.js') }}" type="text/javascript"></script>
-        <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
-        <script src="{{ asset('js/core/bootstrap-material-design.min.js') }}" type="text/javascript"></script>
-        <script src="{{ asset('js/material-kit.min.js?v=2.0.7') }}" type="text/javascript"></script>
-
+        <script src="{{ secure_asset('js/core/popper.min.js') }}" type="text/javascript"></script>
+        <script src="{{ secure_asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
+        <script src="{{ secure_asset('js/material-kit.min.js') }}" type="text/javascript"></script>
         @livewireScripts
         @stack('scripts')
     </body>
