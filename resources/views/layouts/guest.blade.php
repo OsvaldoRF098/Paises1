@@ -12,30 +12,22 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <!-- Fuentes de Google -->
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
 
+        <!-- Material Kit CSS -->
+        <link href="{{ secure_asset('css/material-kit.min.css') }}" rel="stylesheet">
         <!-- Styles -->
         @livewireStyles
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+    <body>
+        <div class="font-sans text-gray-900 antialiased">
+            {{ $slot }}
         </div>
-
+        <!-- Material Kit JS -->
+        <script src="{{ secure_asset('js/core/popper.min.js') }}" type="text/javascript"></script>
+        <script src="{{ secure_asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
+        <script src="{{ secure_asset('js/material-kit.min.js') }}" type="text/javascript"></script>
         @livewireScripts
     </body>
 </html>
