@@ -3,17 +3,15 @@ FROM php:8.2-cli AS composer
 RUN apt-get update && apt-get install -y git unzip && rm -rf /var/lib/apt/lists/*
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 WORKDIR /app
-COPY composer.json composer.lock ./
+COPY . ./
 RUN composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
 
 # Etapa 2: Compilar assets con Node/Vite
 FROM node:18 AS build
 WORKDIR /app
-COPY package*.json vite.config.js ./
-RUN npm install
-COPY . .
+COPY . ./
 COPY --from=composer /app/vendor ./vendor
-RUN npm run build
+RUN npm install && npm run build
 
 # Etapa final: Imagen de producción con PHP 8.2
 FROM php:8.2-fpm
