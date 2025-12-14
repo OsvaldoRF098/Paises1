@@ -1,46 +1,106 @@
-<x-guest-layout>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-        <div>
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Países del Mundo</title>
 
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-900">Bienvenido a Países del Mundo</h1>
-                <p class="mt-4 text-gray-600">
-                    Explora información de todos los países del mundo: banderas, capitales, población y más.
-                </p>
+    <!-- Fuentes de Google -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+
+    <!-- Material Kit CSS -->
+    <link href="{{ asset('css/material-kit.min.css') }}" rel="stylesheet">
+
+    @livewireStyles
+</head>
+<body class="landing-page sidebar-collapse">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-primary fixed-top navbar-transparent" color-on-scroll="100">
+        <div class="container">
+            <div class="navbar-translate">
+                <a class="navbar-brand" href="/">Países del Mundo</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation">
+                    <span class="navbar-toggler-bar bar1"></span>
+                    <span class="navbar-toggler-bar bar2"></span>
+                    <span class="navbar-toggler-bar bar3"></span>
+                </button>
             </div>
+            <div class="collapse navbar-collapse" id="navigation">
+                <ul class="navbar-nav ml-auto">
+                    @guest
+                        <li class="nav-item">
+                            <a href="{{ route('login') }}" class="btn btn-white btn-round">Iniciar sesión</a>
+                        </li>
+                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a href="{{ route('register') }}" class="btn btn-primary btn-round">Registrarse</a>
+                            </li>
+                        @endif
+                    @else
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                {{ Auth::user()->name }}
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="{{ route('countries.index') }}" class="dropdown-item">Dashboard</a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                                </form>
+                            </div>
+                        </li>
+                    @endguest
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-            <div class="grid grid-cols-1 gap-4">
-                <!-- Botón para Iniciar sesión -->
-                <a href="{{ route('login') }}" class="w-full flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                    Iniciar sesión
-                </a>
-
-                <!-- Botón para Registrarse -->
-                <a href="{{ route('register') }}" class="w-full flex items-center justify-center px-6 py-4 border border-indigo-600 text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-indigo-50">
-                    Registrarse (gratis)
-                </a>
-
-                <!-- Botón Dashboard (opcional, lo dejamos pero más pequeño) -->
-                <div class="mt-6 text-center">
-                    <a href="{{ route('dashboard') }}" class="text-sm text-gray-600 hover:text-gray-900">
-                        O accede directamente al Dashboard →
-                    </a>
+    <!-- Header con parallax -->
+    <div class="page-header header-filter" data-parallax="true" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 ml-auto mr-auto text-center">
+                    <h1 class="title">Bienvenido a Países del Mundo</h1>
+                    <h4>Explora información actualizada de todos los países: banderas, capitales, población y más.</h4>
+                    <br>
+                    @guest
+                        <a href="{{ route('register') }}" class="btn btn-primary btn-lg btn-round">Registrarse gratis</a>
+                        <a href="{{ route('login') }}" class="btn btn-white btn-lg btn-round">Iniciar sesión</a>
+                    @endguest
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="mt-12 text-center text-gray-500 text-sm">
-            <p>Una vez registrado, podrás:</p>
-            <ul class="mt-4 space-y-2">
-                <li>✓ Buscar países en tiempo real con Algolia</li>
-                <li>✓ Exportar fichas individuales y listado completo a PDF</li>
-                <li>✓ Resincronizar datos desde la API oficial</li>
-            </ul>
+    <!-- Contenido principal -->
+    <div class="main main-raised">
+        <div class="container">
+            <div class="section text-center py-5">
+                <h2 class="title">Una vez registrado, podrás:</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <i class="material-icons text-primary" style="font-size: 60px;">search</i>
+                        <h4>Buscar en tiempo real con Algolia</h4>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="material-icons text-primary" style="font-size: 60px;">picture_as_pdf</i>
+                        <h4>Exportar a PDF</h4>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="material-icons text-primary" style="font-size: 60px;">sync</i>
+                        <h4>Resincronizar datos</h4>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</x-guest-layout>
+
+    <!-- Scripts de Material Kit -->
+    <script src="{{ asset('js/core/popper.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/material-kit.min.js') }}" type="text/javascript"></script>
+
+    @livewireScripts
+</body>
+</html>
