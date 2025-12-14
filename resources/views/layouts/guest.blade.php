@@ -12,7 +12,13 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @php
+            $viteUrl = env('APP_ENV') === 'production' 
+                ? 'https://paises1-production.up.railway.app/build/' 
+                : 'http://localhost:5173/build/';
+        @endphp
+
+        @vite(['resources/css/app.css', 'resources/js/app.js'], $viteUrl)
 
         <!-- Styles -->
         @livewireStyles
