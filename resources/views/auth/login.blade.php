@@ -1,69 +1,119 @@
-<x-guest-layout>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-        
-        <!-- Logo más pequeño y centrado -->
-        <div class="mb-8">
-            <a href="/">
-                <x-authentication-card-logo class="w-16 h-16 mx-auto fill-current text-gray-500" />
-            </a>
-        </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Países del Mundo</title>
 
-        <!-- Tarjeta de autenticación más compacta y centrada -->
-        <div class="w-full sm:max-w-md mt-6 px-6 py-8 bg-white shadow-lg overflow-hidden sm:rounded-xl border border-gray-200">
-            
-            <x-validation-errors class="mb-4" />
+    <!-- Fuentes -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
 
-            @if (session('status'))
-                <div class="mb-4 font-medium text-sm text-green-600 text-center">
-                    {{ session('status') }}
+    <!-- Material Kit CSS -->
+    <link href="{{ secure_asset('css/material-kit.min.css') }}" rel="stylesheet">
+
+    @livewireStyles
+</head>
+<body class="login-page sidebar-collapse">
+
+    <!-- Header con parallax -->
+    <div class="page-header header-filter" data-parallax="true" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 ml-auto mr-auto text-center">
+                    <h1 class="title">Iniciar Sesión</h1>
+                    <h4>Accede a tu cuenta para explorar los países del mundo</h4>
                 </div>
-            @endif
-
-            <form method="POST" action="{{ secure_url(route('login')) }}">
-                @csrf
-
-                <!-- Email -->
-                <div>
-                    <x-label for="email" value="{{ __('Email') }}" />
-                    <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-                </div>
-
-                <!-- Password -->
-                <div class="mt-4">
-                    <x-label for="password" value="{{ __('Password') }}" />
-                    <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
-                </div>
-
-                <!-- Remember me -->
-                <div class="block mt-4">
-                    <label for="remember_me" class="flex items-center">
-                        <x-checkbox id="remember_me" name="remember" />
-                        <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                    </label>
-                </div>
-
-                <!-- Botones y enlace -->
-                <div class="flex flex-col sm:flex-row items-center justify-between mt-6 gap-4">
-                    @if (Route::has('password.request'))
-                        <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                            {{ __('Forgot your password?') }}
-                        </a>
-                    @endif
-
-                    <x-button class="w-full sm:w-auto justify-center">
-                        {{ __('Log in') }}
-                    </x-button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Texto adicional opcional (puedes quitarlo si no lo quieres) -->
-        <div class="mt-8 text-center text-sm text-gray-500">
-            <p>¿No tienes cuenta? 
-                <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
-                    Registrarse gratis
-                </a>
-            </p>
+            </div>
         </div>
     </div>
-</x-guest-layout>
+
+    <!-- Formulario centrado con Material Kit -->
+    <div class="main main-raised">
+        <div class="container">
+            <div class="section">
+                <div class="row">
+                    <div class="col-md-5 ml-auto mr-auto">
+
+                        <!-- Logo pequeño -->
+                        <div class="text-center mb-5">
+                            <a href="/">
+                                <img src="{{ asset('img/logo.png') }}" alt="Logo" class="img-fluid" style="max-width: 80px;">
+                                <!-- Si no tienes logo personalizado, usa este fallback -->
+                                <!-- <x-application-logo class="w-20 h-20 fill-current text-primary" /> -->
+                            </a>
+                        </div>
+
+                        <div class="card card-login">
+                            <div class="card-body">
+
+                                <x-validation-errors class="mb-4 text-center alert alert-danger" />
+
+                                @if (session('status'))
+                                    <div class="alert alert-success text-center mb-4">
+                                        {{ session('status') }}
+                                    </div>
+                                @endif
+
+                                <form method="POST" action="{{ secure_url(route('login')) }}">
+                                    @csrf
+
+                                    <!-- Email -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="material-icons">email</i></span>
+                                            </div>
+                                            <input type="email" name="email" class="form-control" placeholder="Email..." value="{{ old('email') }}" required autofocus>
+                                        </div>
+                                    </div>
+
+                                    <!-- Password -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="material-icons">lock_outline</i></span>
+                                            </div>
+                                            <input type="password" name="password" class="form-control" placeholder="Contraseña..." required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Remember me -->
+                                    <div class="form-check text-center mb-4">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" name="remember">
+                                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                                            Recordarme
+                                        </label>
+                                    </div>
+
+                                    <!-- Botones -->
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary btn-round btn-lg">Iniciar Sesión</button>
+                                    </div>
+
+                                    <div class="text-center mt-4">
+                                        @if (Route::has('password.request'))
+                                            <a href="{{ route('password.request') }}" class="text-muted">¿Olvidaste tu contraseña?</a>
+                                            <br>
+                                        @endif
+                                        <a href="{{ route('register') }}" class="text-primary">¿No tienes cuenta? Registrarse</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ secure_asset('js/core/popper.min.js') }}" type="text/javascript"></script>
+    <script src="{{ secure_asset('js/core/bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ secure_asset('js/material-kit.min.js') }}" type="text/javascript"></script>
+
+    @livewireScripts
+</body>
+</html>
