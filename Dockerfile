@@ -1,49 +1,59 @@
-# Etapa 1: Builder
-FROM composer:2.7 as composer
-COPY . /app
+# Etapa 1: Instalar dependencias PHP con Composer
+FROM composer:2.7 AS composer
 WORKDIR /app
+COPY composer.json composer.lock ./
 RUN composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
 
-FROM node:18 as node
-COPY . /app
-COPY --from=composer /app/vendor /app/vendor
+# Etapa 2: Compilar assets con Node/Vite
+FROM node:18 AS build
 WORKDIR /app
-RUN npm install && npm run build
+COPY package*.json vite.config.js ./
+RUN npm install
+COPY . .
+COPY --from=composer /app/vendor ./vendor
+RUN npm run build
 
-# Etapa final: Imagen de producción
+# Etapa final: Imagen de producción con PHP
 FROM php:8.2-fpm
 
-# Instalar dependencias del sistema
+# Instalar dependencias del sistema y extensiones PHP
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     libpng-dev \
     libzip-dev \
+    libonig-dev \
     zip \
     unzip \
     git \
     curl \
-    && docker-php-ext-install pdo_pgsql pgsql gd zip bcmath
+    && docker-php-ext-install pdo_pgsql pgsql gd zip bcmath mbstring exif pcntl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copiar código y dependencias
-COPY . /var/www/html
-COPY --from=composer /app/vendor /var/www/html/vendor
-COPY --from=node /app/public/build /var/www/html/public/build
+# Copiar código del proyecto
+WORKDIR /var/www/html
+COPY . .
 
-# Permisos
+# Copiar vendor de la etapa composer
+COPY --from=composer /app/vendor ./vendor
+
+# Copiar assets compilados (build de Vite)
+COPY --from=build /app/public/build ./public/build
+
+# Permisos correctos
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-WORKDIR /var/www/html
-
-# Exponer puerto (Railway usa $PORT)
+# Exponer puerto dinámico de Railway
+ENV PORT=8000
 EXPOSE $PORT
 
-# Comando de inicio
-CMD php artisan migrate --force && \
+# Comando de inicio (robusto para producción)
+CMD php artisan migrate --force || true && \
+    php artisan storage:link || true && \
     php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache && \
-    php artisan storage:link && \
-    php artisan scout:import "App\Models\Country" && \
+    php artisan scout:import "App\Models\Country" || true && \
     php artisan serve --host=0.0.0.0 --port=$PORT
