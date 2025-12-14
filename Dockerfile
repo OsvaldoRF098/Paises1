@@ -1,17 +1,17 @@
-# Etapa 1: Instalar dependencias PHP con Composer
+# Etapa 1: Composer
 FROM composer:2.7 AS composer
 WORKDIR /app
 COPY . /app
 RUN composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
 
-# Etapa 2: Compilar assets con Node/Vite
+# Etapa 2: Vite build
 FROM node:18 AS build
 WORKDIR /app
 COPY . /app
 COPY --from=composer /app/vendor /app/vendor
 RUN npm install && npm run build
 
-# Etapa final: Imagen de producción
+# Etapa final
 FROM php:8.2-fpm
 
 RUN apt-get update && apt-get install -y \
