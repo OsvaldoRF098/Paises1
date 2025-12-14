@@ -46,4 +46,5 @@ CMD php artisan migrate --force || true && \
     php artisan route:cache && \
     php artisan view:cache && \
     php artisan scout:import "App\Models\Country" || true && \
+    rm -f public/hot || true && \
     php artisan serve --host=0.0.0.0 --port=$PORT
