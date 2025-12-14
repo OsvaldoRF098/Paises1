@@ -1,5 +1,6 @@
-# Etapa 1: Instalar dependencias PHP con Composer
-FROM composer:2.7 AS composer
+# Etapa 1: Instalar dependencias PHP con Composer (forzando PHP 8.2)
+FROM php:8.2-cli AS composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
@@ -13,7 +14,7 @@ COPY . .
 COPY --from=composer /app/vendor ./vendor
 RUN npm run build
 
-# Etapa final: Imagen de producción con PHP
+# Etapa final: Imagen de producción con PHP 8.2
 FROM php:8.2-fpm
 
 # Instalar dependencias del sistema y extensiones PHP
