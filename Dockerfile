@@ -1,5 +1,6 @@
-# Etapa 1: Instalar dependencias PHP con Composer (forzando PHP 8.2)
+# Etapa 1: Instalar dependencias PHP con Composer (con git para downloads from source)
 FROM php:8.2-cli AS composer
+RUN apt-get update && apt-get install -y git unzip && rm -rf /var/lib/apt/lists/*
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 WORKDIR /app
 COPY composer.json composer.lock ./
